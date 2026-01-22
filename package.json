@@ -16,6 +16,7 @@
   "imports": {
     "#controllers/*": "./app/controllers/*.js",
     "#exceptions/*": "./app/exceptions/*.js",
+    "#helpers/*": "./app/helpers/*.js",
     "#models/*": "./app/models/*.js",
     "#mails/*": "./app/mails/*.js",
     "#services/*": "./app/services/*.js",
@@ -56,6 +57,7 @@
     "@adonisjs/cors": "^2.2.1",
     "@adonisjs/lucid": "^21.6.1",
     "@vinejs/vine": "^3.0.1",
+    "adonis-lucid-soft-deletes": "^2.1.0",
     "luxon": "^3.7.2",
     "mysql2": "^3.16.1",
     "reflect-metadata": "^0.2.2"
