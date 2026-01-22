@@ -11,7 +11,11 @@ Setelah melakukan clone repo, jalankan comment dibawah:
 
 ```
 npm i
+```
+```
 node ace migration:run
+```
+```
 node ace db:seed
 ```
 
