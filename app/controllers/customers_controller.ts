@@ -1,8 +1,11 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import Customer from '#models/Customer'
+import User from '#models/User'
+import Roles from '#models/Roles'
 import { createCustomerValidator, updateCustomerValidator } from '#validators/customer'
 import * as ResponseData from '#helpers/ResponseHelper'
 import { pagination } from '#helpers/Pagination'
+import hash from '@adonisjs/core/services/hash'
 
 export default class CustomersController {
     /**
@@ -94,22 +97,63 @@ export default class CustomersController {
      */
     async store(ctx: HttpContext) {
         try {
-            const user = ctx.auth.user!
-            const data = await ctx.request.validateUsing(createCustomerValidator)
+            const authenticatedUser = ctx.auth.user!
+            const customerData = await ctx.request.validateUsing(createCustomerValidator)
 
             // Security Check: Only admin can create customers
-            await user.load('roles')
-            const isAdmin = user.roles.some(r => r.name === 'admin')
+            await authenticatedUser.load('roles')
+            const isAdmin = authenticatedUser.roles.some(r => r.name === 'admin')
 
             if (!isAdmin) {
                 return ResponseData.forbidden(ctx, 'Hanya admin yang memiliki akses untuk membuat customer')
             }
 
-            const customer = await Customer.create(data)
+            // Create a new user account for the customer
+            const defaultPassword = 'password123'; // Default password for new customers
+            
+            // Generate a unique username based on customer name
+            const baseUsername = customerData.name.toLowerCase().replace(/\s+/g, '');
+            let username = baseUsername;
+            let counter = 1;
+            
+            // Check if username already exists, increment if needed
+            while (await User.query().where('username', username).first()) {
+                username = `${baseUsername}${counter}`;
+                counter++;
+            }
+            
+            // Generate email if not provided
+            const email = `${username}@customer.minibank.com`;
+            
+            const newUser = await User.create({
+                username,
+                email,
+                password: await hash.make(defaultPassword),
+            });
 
-            return ResponseData.created(ctx, 'Customer berhasil dibuat', customer)
+            // Assign 'customer' role to the new user
+            const customerRole = await Roles.query().where('name', 'customer').first();
+            if (customerRole) {
+                await newUser.related('roles').attach([customerRole.id]);
+            }
+
+            // Create the customer record and link it to the user
+            const customer = await Customer.create({
+                ...customerData,
+                userId: newUser.id,
+            });
+
+            return ResponseData.created(ctx, 'Customer dan akun pengguna berhasil dibuat', {
+                customer,
+                user: {
+                    id: newUser.id,
+                    username: newUser.username,
+                    email: newUser.email,
+                    message: 'Akun pengguna baru telah dibuat dengan password default: password123'
+                }
+            });
         } catch (error) {
-            return ResponseData.serverError(ctx, error.message)
+            return ResponseData.serverError(ctx, error.message);
         }
     }
 
