@@ -11,7 +11,8 @@
     "test": "node ace test",
     "lint": "eslint .",
     "format": "prettier --write .",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "setup": "./scripts/setup_db.sh"
   },
   "imports": {
     "#controllers/*": "./app/controllers/*.js",
