@@ -11,7 +11,7 @@ export default function transactionRoutes() {
             router.post('/withdraw', [TransactionsController, 'withdraw'])
                 .use(middleware.role('customer'))
 
-            router.get('/all/transactions', [TransactionsController, 'index'])
+            router.get('/all-transactions', [TransactionsController, 'index'])
                 .use(middleware.role('admin'))
         })
         .prefix('api/transaction')
