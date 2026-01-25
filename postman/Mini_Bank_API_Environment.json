@@ -1,0 +1,24 @@
+{
+    "name": "Mini Bank Local Environment",
+    "values": [
+        {
+            "key": "baseUrl",
+            "value": "http://localhost:3333",
+            "type": "default",
+            "enabled": true
+        },
+        {
+            "key": "authToken",
+            "value": "",
+            "type": "default",
+            "enabled": true
+        },
+        {
+            "key": "userId",
+            "value": "",
+            "type": "default",
+            "enabled": true
+        }
+    ],
+    "_postman_variable_scope": "environment"
+}

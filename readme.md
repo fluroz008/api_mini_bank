@@ -133,11 +133,12 @@ Berikut adalah akun default yang dapat digunakan untuk testing:
 
 Kami menyediakan koleksi Postman untuk mempermudah pengujian API dan alur aplikasi.
 
-### Cara Import Postman Collection
+### Cara Import Postman Collection & Environment
 1.  Buka aplikasi **Postman**.
 2.  Klik tombol **Import** di pojok kiri atas (atau `Ctrl + O` / `Cmd + O`).
-3.  Pilih file `postman/Mini_Bank_API_Postman_Collection.json` dari dalam folder project ini.
-4.  Collection **Mini Bank API** akan muncul di sidebar Postman anda.
+3.  Pilih file `postman/Mini_Bank_API_Postman_Collection.json`.
+4.  Pilih juga file `postman/Mini_Bank_API_Environment.json` untuk mengimport variabel environment.
+5.  Pastikan memilih environment **Mini Bank Local Environment** di pojok kanan atas Postman.
 
 ### Cara Akses & Testing
 1.  Pastikan aplikasi berjalan (`npm run dev`) dan dapat diakses di `http://localhost:3333`.
